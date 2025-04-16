@@ -1,0 +1,101 @@
+1. Directory Structure
+YourWebApp/
+│
+├── WebContent/
+│   ├── index.html
+│   └── WEB-INF/
+│       └── web.xml      (optional if you use annotations)
+│
+└── src/
+    └── com.example.servlets/
+        └── LoginServlet.java
+
+2. index.html (Login Form)
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+</head>
+<body>
+    <h2>Please log in</h2>
+    <form action="login" method="post">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <br><br>
+
+
+3. LoginServlet.java
+package com.example.servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/login")
+public class LoginServlet extends HttpServlet {
+    // Hard‑coded demo credentials
+    private static final String DEMO_USER = "admin";
+    private static final String DEMO_PASS = "password123";
+
+    @Override
+    protected void doPost(HttpServletRequest request,
+                          HttpServletResponse response)
+                          throws ServletException, IOException {
+        // Set response content type
+        response.setContentType("text/html;charset=UTF-8");
+
+        // Read form fields
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        try (PrintWriter out = response.getWriter()) {
+            out.println("<!DOCTYPE html>");
+            out.println("<html><head><meta charset='UTF-8'><title>Result</title></head><body>");
+
+            // Validate credentials
+            if (DEMO_USER.equals(username) && DEMO_PASS.equals(password)) {
+                out.printf("<h2>Welcome, %s!</h2>%n", username);
+                out.println("<p>You have successfully logged in.</p>");
+            } else {
+                out.println("<h2>Login Failed</h2>");
+                out.println("<p>Invalid username or password.</p>");
+                out.println("<a href=\"index.html\">Try again</a>");
+            }
+
+            out.println("</body></html>");
+        }
+    }
+}
+
+
+
+
+        <button type="submit">Log In</button>
+    </form>
+</body>
+</html>
+
+
+5.  Output
+Successful login (username: admin, password: password123):
+<!DOCTYPE html>
+<html>
+<head><meta charset='UTF-8'><title>Result</title></head>
+<body>
+  <h2>Welcome, admin!</h2>
+  <p>You have successfully logged in.</p>
+</body>
+</html>
+
+
+
+
+
